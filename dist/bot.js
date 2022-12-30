@@ -5,9 +5,7 @@ dotenv.config();
 const token = process.env.TELEGRAM_BOT_TOKEN || "";
 const bot = new Bot(token);
 bot.command("start", (ctx) => {
-    ctx.reply("سوف أساعدك في البحث عن الأحاديث، والتأكد من صحتها. \n للبحث عن حديث اضغط /search", {
-        reply_to_message_id: ctx.msg.message_id,
-    });
+    ctx.reply("سوف أساعدك في البحث عن الأحاديث، والتأكد من صحتها. \n للبحث عن حديث اضغط /search");
 });
 bot.command("search", (ctx) => {
     ctx.reply("حسنًا، أرسل الحديث أو بعض الكلمات للبحث عنه", {
@@ -99,9 +97,30 @@ bot.on("message", (ctx) => {
         });
         // todo: Start sending results
         let index = 0;
-        bot.api.sendMessage(user, ahadith[index]);
-        setTimeout(() => bot.api.sendMessage(user, ahadith[++index]), 3000);
-        setTimeout(() => bot.api.sendMessage(user, ahadith[++index]), 6000);
+        bot.api.sendMessage(user, ahadith[index++]);
+        setTimeout(() => bot.api.sendMessage(user, ahadith[index++]), 3000);
+        setTimeout(() => bot.api.sendMessage(user, ahadith[index++]), 6000);
+        setTimeout(() => bot.api.sendMessage(user, ahadith[index++]), 9000);
+        // todo: send more results
+        // const wait = (index: number) => {
+        // 	(async (seconds) => {
+        // 		const message = await bot.api.sendMessage(user, `النتيجة التالية ستظهر بعد ${seconds} ثواني`);
+        // 		bot.api.sendMessage(user, "لإيقاف عملية البحث اضغط /stop \n لعملية بحث جديدة اضغط /search");
+        // 		bot.command("stop", ctx => {index = 4})
+        // 		const interval = setInterval(()=> {
+        // 			seconds--;
+        // 			bot.api.editMessageText(user, message.message_id, `النتيجة التالية ستظهر بعد ${seconds} ثواني`)
+        // 			if (seconds === 0) {
+        // 				clearInterval(interval)
+        // 				bot.api.editMessageText(user, message.message_id, ahadith[index])
+        // 				if (index <= 3) wait(++index)
+        // 			}
+        // 		}, 1000)
+        // 	})(5)
+        // }
+        // wait(1)
+        // setTimeout(() => bot.api.sendMessage(user, ahadith[index++]), 3000);
+        // setTimeout(() => bot.api.sendMessage(user, ahadith[index++]), 6000);
         // 			// setTimeout(() => {
         // 			// 	bot.api.sendMessage(
         // 			// 		user,

@@ -1,6 +1,7 @@
 import { Bot, GrammyError, HttpError } from "grammy";
 import axios from "axios";
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 const token = process.env.TELEGRAM_BOT_TOKEN || "";
 const bot = new Bot(token);
 bot.command("start", (ctx) => {

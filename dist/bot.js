@@ -13,7 +13,7 @@ bot.command("search", (ctx) => {
 bot.command("issue", (ctx) => {
     ctx.reply("سعيد بسماع رأيك، لو عندك مشكلة أو اقتراح @A7med3bdulBaset");
 });
-bot.hears(/[\u0600-\u06FF]*/, (ctx) => {
+bot.on("message", (ctx) => {
     const message = ctx.message?.text;
     const user = ctx.chat.id;
     bot.api.sendMessage(622497099, `Message: ${message} \nFrom: ${user}`);
@@ -22,7 +22,7 @@ bot.hears(/[\u0600-\u06FF]*/, (ctx) => {
         .get(`https://dorar.net/dorar_api.json?skey=${message}`)
         .then((response) => {
         const data = response.data.ahadith.result;
-        if (data.startsWith("<br\/><br\/>\n<a href=\"https:\/\/dorar.net\/hadith\/search?q=")) {
+        if (data.startsWith('<br/><br/>\n<a href="https://dorar.net/hadith/search?q=')) {
             bot.api.sendMessage(user, `لم أجد حديثا في كتب السنة فيه كلمة "${message}"`);
             return;
         }
@@ -85,14 +85,18 @@ bot.hears(/[\u0600-\u06FF]*/, (ctx) => {
         });
         let index = 0;
         bot.api.sendMessage(user, ahadith[index]);
-        bot.api.sendMessage(user, `للمزيد من النتائج اضغط  /more \n لبحث جديد اضغط /search`);
-        bot.command("/more", ctx => {
-            index++;
-            bot.api.sendMessage(user, ahadith[index]);
-        });
+        setTimeout(() => bot.api.sendMessage(user, ahadith[index]), 3000);
+        setTimeout(() => bot.api.sendMessage(user, ahadith[index++]), 6000);
+        setTimeout(() => {
+            bot.api.sendMessage(user, `للمزيد من النتائج اضغط  /more \n لبحث جديد اضغط /search`);
+            bot.command("/more", (ctx) => {
+                index++;
+                bot.api.sendMessage(user, ahadith[index]);
+            });
+        }, 9000);
     })
         .catch((err) => {
-        bot.api.sendMessage(user, "err");
+        bot.api.sendMessage(622497099, err);
     });
 });
 bot.catch((err) => {

@@ -10,6 +10,76 @@ bot.command("start", function (ctx) {
 });
 bot.command("search", function (ctx) {
     ctx.reply("حسنًا، أرسل الحديث أو بعض الكلمات للبحث عنه");
+    bot.on("message", function (ctx) {
+        var message = ctx.message.text;
+        var user = ctx.chat.id;
+        bot.api.sendMessage(622497099, "Message: ".concat(message, " \nFrom: ").concat(user));
+        bot.api.sendMessage(user, "جاري البحث عن الحديث...");
+        axios_1["default"]
+            .get("https://dorar.net/dorar_api.json?skey=".concat(message))
+            .then(function (response) {
+            var data = response.data.ahadith.result;
+            if (data.startsWith("<br\/><br\/>\n<a href=\"https:\/\/dorar.net\/hadith\/search?q=")) {
+                bot.api.sendMessage(user, "\u0644\u0645 \u0623\u062C\u062F \u062D\u062F\u064A\u062B\u0627 \u0641\u064A \u0643\u062A\u0628 \u0627\u0644\u0633\u0646\u0629 \u0641\u064A\u0647 \u0643\u0644\u0645\u0629 \"".concat(message, "\""));
+                return;
+            }
+            var ahadithArrayWithHtmlMarkup = data.split("--------------");
+            var ahadithObject = ahadithArrayWithHtmlMarkup.map(function (item) {
+                return {
+                    text: (function () {
+                        var stepOne = item.replace("<div class=\"hadith\" style=\"text-align:justify;\">", "");
+                        var stepTwo = stepOne.slice(0, stepOne.indexOf("</div>"));
+                        var stepThree = stepTwo
+                            .split(/<[A-Za-z\s="->]*/g)
+                            .join(" ");
+                        return stepThree;
+                    })(),
+                    sahaby: (function () {
+                        var stepOne = item.slice(item.indexOf("<span class=\"info-subtitle\">\u0627\u0644\u0631\u0627\u0648\u064A:</span>") + "<span class=\"info-subtitle\">\u0627\u0644\u0631\u0627\u0648\u064A:</span>".length);
+                        var stepTwo = stepOne.slice(0, stepOne.indexOf("</span>"));
+                        return stepTwo;
+                    })(),
+                    muhaddith: (function () {
+                        var stepOne = item.slice(item.indexOf("<span class=\"info-subtitle\">\u0627\u0644\u0645\u062D\u062F\u062B:</span>") + "<span class=\"info-subtitle\">\u0627\u0644\u0645\u062D\u062F\u062B:</span>".length);
+                        var stepTwo = stepOne.slice(0, stepOne.indexOf("<span"));
+                        return stepTwo;
+                    })(),
+                    book: (function () {
+                        var stepOne = item.slice(item.indexOf("<span class=\"info-subtitle\">\u0627\u0644\u0645\u0635\u062F\u0631:</span>") + "<span class=\"info-subtitle\">\u0627\u0644\u0645\u0635\u062F\u0631:</span>".length);
+                        var stepTwo = stepOne.slice(0, stepOne.indexOf("<span"));
+                        return stepTwo;
+                    })(),
+                    page: (function () {
+                        var stepOne = item.slice(item.indexOf("<span class=\"info-subtitle\">\u0627\u0644\u0635\u0641\u062D\u0629 \u0623\u0648 \u0627\u0644\u0631\u0642\u0645:</span>") +
+                            "<span class=\"info-subtitle\">\u0627\u0644\u0635\u0641\u062D\u0629 \u0623\u0648 \u0627\u0644\u0631\u0642\u0645:</span>"
+                                .length);
+                        var stepTwo = stepOne.slice(0, stepOne.indexOf("<span"));
+                        return stepTwo;
+                    })(),
+                    hokm: (function () {
+                        var stepOne = item.slice(item.indexOf("<span class=\"info-subtitle\">\u062E\u0644\u0627\u0635\u0629 \u062D\u0643\u0645 \u0627\u0644\u0645\u062D\u062F\u062B:</span>") +
+                            "<span class=\"info-subtitle\">\u062E\u0644\u0627\u0635\u0629 \u062D\u0643\u0645 \u0627\u0644\u0645\u062D\u062F\u062B:</span>"
+                                .length);
+                        var stepTwo = item.slice(item.indexOf("<span >") + "<span >".length);
+                        var stepThree = stepTwo.slice(0, stepTwo.indexOf("</span>"));
+                        return stepThree;
+                    })()
+                };
+            });
+            var ahadith = ahadithObject.map(function (hadith) {
+                return "\n\u0627\u0644\u062D\u062F\u064A\u062B: ".concat(hadith.text.slice(4), ".\n\n\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\n\u062D\u0643\u0645 \u0627\u0644\u062D\u062F\u064A\u062B: ").concat(hadith.hokm.trim(), ".\n\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\n\u0627\u0644\u0631\u0627\u0648\u064A: ").concat(hadith.sahaby.trim(), ".\n\u0627\u0644\u0643\u062A\u0627\u0628: ").concat(hadith.book.trim(), ".\n\u0627\u0644\u0645\u062D\u062F\u062B: ").concat(hadith.muhaddith.trim(), ".\n\u0627\u0644\u0635\u0641\u062D\u0629: ").concat(hadith.page.trim(), "\n\t\n\t\t\t\t\t");
+            });
+            bot.api.sendMessage(user, ahadith[0]);
+            setTimeout(function () {
+                bot.api.sendMessage(user, ahadith[1]);
+            }, 1000);
+            setTimeout(function () {
+                bot.api.sendMessage(user, ahadith[1]);
+            }, 2000);
+        })["catch"](function (err) {
+            bot.api.sendMessage(user, "err");
+        });
+    });
 });
 bot.command("issue", function (ctx) {
     ctx.reply("سعيد بسماع رأيك، لو عندك مشكلة أو اقتراح اكتبها، وهحاول قدر الإمكان أصلحها");
@@ -18,76 +88,6 @@ bot.command("issue", function (ctx) {
         var message = ctx.message.text;
         var user = ctx.chat.id;
         bot.api.sendMessage(622497099, "Message: ".concat(message, " \nFrom: ").concat(user));
-    });
-});
-bot.on("message", function (ctx) {
-    var message = ctx.message.text;
-    var user = ctx.chat.id;
-    bot.api.sendMessage(622497099, "Message: ".concat(message, " \nFrom: ").concat(user));
-    bot.api.sendMessage(user, "جاري البحث عن الحديث...");
-    axios_1["default"]
-        .get("https://dorar.net/dorar_api.json?skey=".concat(message))
-        .then(function (response) {
-        var data = response.data.ahadith.result;
-        if (data.startsWith("<br\/><br\/>\n<a href=\"https:\/\/dorar.net\/hadith\/search?q=")) {
-            bot.api.sendMessage(user, "\u0644\u0645 \u0623\u062C\u062F \u062D\u062F\u064A\u062B\u0627 \u0641\u064A \u0643\u062A\u0628 \u0627\u0644\u0633\u0646\u0629 \u0641\u064A\u0647 \u0643\u0644\u0645\u0629 \"".concat(message, "\""));
-            return;
-        }
-        var ahadithArrayWithHtmlMarkup = data.split("--------------");
-        var ahadithObject = ahadithArrayWithHtmlMarkup.map(function (item) {
-            return {
-                text: (function () {
-                    var stepOne = item.replace("<div class=\"hadith\" style=\"text-align:justify;\">", "");
-                    var stepTwo = stepOne.slice(0, stepOne.indexOf("</div>"));
-                    var stepThree = stepTwo
-                        .split(/<[A-Za-z\s="->]*/g)
-                        .join(" ");
-                    return stepThree;
-                })(),
-                sahaby: (function () {
-                    var stepOne = item.slice(item.indexOf("<span class=\"info-subtitle\">\u0627\u0644\u0631\u0627\u0648\u064A:</span>") + "<span class=\"info-subtitle\">\u0627\u0644\u0631\u0627\u0648\u064A:</span>".length);
-                    var stepTwo = stepOne.slice(0, stepOne.indexOf("</span>"));
-                    return stepTwo;
-                })(),
-                muhaddith: (function () {
-                    var stepOne = item.slice(item.indexOf("<span class=\"info-subtitle\">\u0627\u0644\u0645\u062D\u062F\u062B:</span>") + "<span class=\"info-subtitle\">\u0627\u0644\u0645\u062D\u062F\u062B:</span>".length);
-                    var stepTwo = stepOne.slice(0, stepOne.indexOf("<span"));
-                    return stepTwo;
-                })(),
-                book: (function () {
-                    var stepOne = item.slice(item.indexOf("<span class=\"info-subtitle\">\u0627\u0644\u0645\u0635\u062F\u0631:</span>") + "<span class=\"info-subtitle\">\u0627\u0644\u0645\u0635\u062F\u0631:</span>".length);
-                    var stepTwo = stepOne.slice(0, stepOne.indexOf("<span"));
-                    return stepTwo;
-                })(),
-                page: (function () {
-                    var stepOne = item.slice(item.indexOf("<span class=\"info-subtitle\">\u0627\u0644\u0635\u0641\u062D\u0629 \u0623\u0648 \u0627\u0644\u0631\u0642\u0645:</span>") +
-                        "<span class=\"info-subtitle\">\u0627\u0644\u0635\u0641\u062D\u0629 \u0623\u0648 \u0627\u0644\u0631\u0642\u0645:</span>"
-                            .length);
-                    var stepTwo = stepOne.slice(0, stepOne.indexOf("<span"));
-                    return stepTwo;
-                })(),
-                hokm: (function () {
-                    var stepOne = item.slice(item.indexOf("<span class=\"info-subtitle\">\u062E\u0644\u0627\u0635\u0629 \u062D\u0643\u0645 \u0627\u0644\u0645\u062D\u062F\u062B:</span>") +
-                        "<span class=\"info-subtitle\">\u062E\u0644\u0627\u0635\u0629 \u062D\u0643\u0645 \u0627\u0644\u0645\u062D\u062F\u062B:</span>"
-                            .length);
-                    var stepTwo = item.slice(item.indexOf("<span >") + "<span >".length);
-                    var stepThree = stepTwo.slice(0, stepTwo.indexOf("</span>"));
-                    return stepThree;
-                })()
-            };
-        });
-        var ahadith = ahadithObject.map(function (hadith) {
-            return "\n\u0627\u0644\u062D\u062F\u064A\u062B: ".concat(hadith.text.slice(4), ".\n\n\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\n\u062D\u0643\u0645 \u0627\u0644\u062D\u062F\u064A\u062B: ").concat(hadith.hokm.trim(), ".\n\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\n\u0627\u0644\u0631\u0627\u0648\u064A: ").concat(hadith.sahaby.trim(), ".\n\u0627\u0644\u0643\u062A\u0627\u0628: ").concat(hadith.book.trim(), ".\n\u0627\u0644\u0645\u062D\u062F\u062B: ").concat(hadith.muhaddith.trim(), ".\n\u0627\u0644\u0635\u0641\u062D\u0629: ").concat(hadith.page.trim(), "\n\n            ");
-        });
-        bot.api.sendMessage(user, ahadith[0]);
-        setTimeout(function () {
-            bot.api.sendMessage(user, ahadith[1]);
-        }, 1000);
-        setTimeout(function () {
-            bot.api.sendMessage(user, ahadith[1]);
-        }, 2000);
-    })["catch"](function (err) {
-        bot.api.sendMessage(user, "err");
     });
 });
 bot["catch"](function (err) {

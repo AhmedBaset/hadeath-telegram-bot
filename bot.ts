@@ -1,4 +1,4 @@
-import { Bot } from "grammy";
+import { Bot, GrammyError, HttpError } from "grammy";
 import axios from "axios";
 
 require("dotenv").config();
@@ -124,11 +124,20 @@ bot.on("message", (ctx) => {
 		.catch((err) => {
 			bot.api.sendMessage(user, "err");
 		});
+});
 
-	bot.catch((err) => {
-		const message: any = err.error;
-		bot.api.sendMessage(622497099, `Error: ${message.description}`);
-	});
+bot.catch((err) => {
+	const ctx = err.ctx;
+	bot.api.sendMessage(622497099, `Error while handling update: \n${ctx.update.update_id}`);
+	const e = err.error;
+	if (e instanceof GrammyError) {
+		bot.api.sendMessage(622497099, `Error in request: \n${e.description}`);
+	} else if (e instanceof HttpError) {
+		console.error("Could not contact Telegram:", e);
+		bot.api.sendMessage(622497099, `Could not contact Telegram: \n${e}`);
+	} else {
+		bot.api.sendMessage(622497099, `Unknown error: \n${e}`);
+	}
 });
 
 bot.start();

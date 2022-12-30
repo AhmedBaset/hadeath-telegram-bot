@@ -72,9 +72,20 @@ bot.on("message", function (ctx) {
     })["catch"](function (err) {
         bot.api.sendMessage(user, "err");
     });
-    bot["catch"](function (err) {
-        var message = err.error;
-        bot.api.sendMessage(622497099, "Error: ".concat(message.description));
-    });
+});
+bot["catch"](function (err) {
+    var ctx = err.ctx;
+    bot.api.sendMessage(622497099, "Error while handling update: \n".concat(ctx.update.update_id));
+    var e = err.error;
+    if (e instanceof grammy_1.GrammyError) {
+        bot.api.sendMessage(622497099, "Error in request: \n".concat(e.description));
+    }
+    else if (e instanceof grammy_1.HttpError) {
+        console.error("Could not contact Telegram:", e);
+        bot.api.sendMessage(622497099, "Could not contact Telegram: \n".concat(e));
+    }
+    else {
+        bot.api.sendMessage(622497099, "Unknown error: \n".concat(e));
+    }
 });
 bot.start();

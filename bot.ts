@@ -118,6 +118,8 @@ bot.on("message", (ctx) => {
 			});
 
 			bot.api.sendMessage(user, ahadith[0]);
+			bot.api.sendMessage(user, ahadith[1]);
+			bot.api.sendMessage(user, ahadith[2]);
 		})
 		.catch((err) => {
 			bot.api.sendMessage(user, "err");

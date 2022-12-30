@@ -85,15 +85,18 @@ bot.on("message", (ctx) => {
         });
         let index = 0;
         bot.api.sendMessage(user, ahadith[index]);
-        setTimeout(() => bot.api.sendMessage(user, ahadith[index]), 3000);
-        setTimeout(() => bot.api.sendMessage(user, ahadith[index++]), 6000);
-        setTimeout(() => {
-            bot.api.sendMessage(user, `للمزيد من النتائج اضغط  /more \n لبحث جديد اضغط /search`);
-            bot.command("/more", (ctx) => {
-                index++;
-                bot.api.sendMessage(user, ahadith[index]);
-            });
-        }, 9000);
+        setTimeout(() => bot.api.sendMessage(user, ahadith[++index]), 3000);
+        setTimeout(() => bot.api.sendMessage(user, ahadith[++index]), 6000);
+        // setTimeout(() => {
+        // 	bot.api.sendMessage(
+        // 		user,
+        // 		`للمزيد من النتائج اضغط  /more \n لبحث جديد اضغط /search`
+        // 	);
+        // 	bot.command("/more", (ctx) => {
+        // 		index++;
+        // 		bot.api.sendMessage(user, ahadith[index]);
+        // 	});
+        // }, 9000);
     })
         .catch((err) => {
         bot.api.sendMessage(622497099, err);

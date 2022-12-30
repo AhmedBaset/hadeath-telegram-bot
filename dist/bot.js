@@ -13,8 +13,8 @@ bot.command("search", (ctx) => {
 bot.command("issue", (ctx) => {
     ctx.reply("سعيد بسماع رأيك، لو عندك مشكلة أو اقتراح @A7med3bdulBaset");
 });
-bot.on("message", (ctx) => {
-    const message = ctx.message.text;
+bot.hears(/[\u0600-\u06FF]/, (ctx) => {
+    const message = ctx.message?.text;
     const user = ctx.chat.id;
     bot.api.sendMessage(622497099, `Message: ${message} \nFrom: ${user}`);
     bot.api.sendMessage(user, "جاري البحث عن الحديث...");

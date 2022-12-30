@@ -11,8 +11,17 @@ bot.command("start", function (ctx) {
 bot.command("search", function (ctx) {
     ctx.reply("حسنًا، أرسل الحديث أو بعض الكلمات للبحث عنه");
 });
+bot.command("issue", function (ctx) {
+    ctx.reply("سعيد بسماع رأيك، لو عندك مشكلة أو اقتراح اكتبها، وهحاول قدر الإمكان أصلحها");
+    bot.on("message", function (ctx) {
+        ctx.reply("شكرا، سيتم عمل اللازم");
+        var message = ctx.message.text;
+        var user = ctx.chat.id;
+        bot.api.sendMessage(622497099, "Message: ".concat(message, " \nFrom: ").concat(user));
+    });
+});
 bot.on("message", function (ctx) {
-    var message = ctx.message.text; // Message object
+    var message = ctx.message.text;
     var user = ctx.chat.id;
     bot.api.sendMessage(622497099, "Message: ".concat(message, " \nFrom: ").concat(user));
     bot.api.sendMessage(user, "جاري البحث عن الحديث...");
@@ -67,8 +76,12 @@ bot.on("message", function (ctx) {
             return "\n\u0627\u0644\u062D\u062F\u064A\u062B: ".concat(hadith.text.slice(4), ".\n\n\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\n\u062D\u0643\u0645 \u0627\u0644\u062D\u062F\u064A\u062B: ").concat(hadith.hokm.trim(), ".\n\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\n\u0627\u0644\u0631\u0627\u0648\u064A: ").concat(hadith.sahaby.trim(), ".\n\u0627\u0644\u0643\u062A\u0627\u0628: ").concat(hadith.book.trim(), ".\n\u0627\u0644\u0645\u062D\u062F\u062B: ").concat(hadith.muhaddith.trim(), ".\n\u0627\u0644\u0635\u0641\u062D\u0629: ").concat(hadith.page.trim(), "\n\n            ");
         });
         bot.api.sendMessage(user, ahadith[0]);
-        setTimeout(function () { return bot.api.sendMessage(user, ahadith[1]); }, 1000);
-        setTimeout(function () { return bot.api.sendMessage(user, ahadith[1]); }, 2000);
+        setTimeout(function () {
+            bot.api.sendMessage(user, ahadith[1]);
+        }, 1000);
+        setTimeout(function () {
+            bot.api.sendMessage(user, ahadith[1]);
+        }, 2000);
     })["catch"](function (err) {
         bot.api.sendMessage(user, "err");
     });

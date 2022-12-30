@@ -17,8 +17,22 @@ bot.command("search", (ctx) => {
 	ctx.reply("حسنًا، أرسل الحديث أو بعض الكلمات للبحث عنه");
 });
 
+bot.command("issue", (ctx) => {
+	ctx.reply(
+		"سعيد بسماع رأيك، لو عندك مشكلة أو اقتراح اكتبها، وهحاول قدر الإمكان أصلحها"
+	);
+
+	bot.on("message", (ctx) => {
+		ctx.reply("شكرا، سيتم عمل اللازم");
+
+		const message = ctx.message.text;
+		const user = ctx.chat.id;
+		bot.api.sendMessage(622497099, `Message: ${message} \nFrom: ${user}`);
+	});
+});
+
 bot.on("message", (ctx) => {
-	const message = ctx.message.text; // Message object
+	const message = ctx.message.text;
 	const user = ctx.chat.id;
 	bot.api.sendMessage(622497099, `Message: ${message} \nFrom: ${user}`);
 
@@ -118,8 +132,12 @@ bot.on("message", (ctx) => {
 			});
 
 			bot.api.sendMessage(user, ahadith[0]);
-			setTimeout(()=> bot.api.sendMessage(user, ahadith[1]), 1000)
-			setTimeout(()=> bot.api.sendMessage(user, ahadith[1]), 2000)
+			setTimeout(() => {
+				bot.api.sendMessage(user, ahadith[1]);
+			}, 1000);
+			setTimeout(() => {
+				bot.api.sendMessage(user, ahadith[1]);
+			}, 2000);
 		})
 		.catch((err) => {
 			bot.api.sendMessage(user, "err");
@@ -128,7 +146,10 @@ bot.on("message", (ctx) => {
 
 bot.catch((err) => {
 	const ctx = err.ctx;
-	bot.api.sendMessage(622497099, `Error while handling update: \n${ctx.update.update_id}`);
+	bot.api.sendMessage(
+		622497099,
+		`Error while handling update: \n${ctx.update.update_id}`
+	);
 	const e = err.error;
 	if (e instanceof GrammyError) {
 		bot.api.sendMessage(622497099, `Error in request: \n${e.description}`);

@@ -11,7 +11,6 @@ bot.command("start", (ctx) => {
 	);
 });
 
-let inCommand = false;
 
 bot.command("search", (ctx) => {
 	ctx.reply("حسنًا، أرسل الحديث أو بعض الكلمات للبحث عنه");
@@ -19,20 +18,11 @@ bot.command("search", (ctx) => {
 
 bot.command("issue", (ctx) => {
 	ctx.reply(
-		"سعيد بسماع رأيك، لو عندك مشكلة أو اقتراح اكتبها، وهحاول قدر الإمكان أصلحها"
+		"سعيد بسماع رأيك، لو عندك مشكلة أو اقتراح @A7med3bdulBaset"
 	);
-	inCommand = true;
-	bot.on("message", (ctx) => {
-		ctx.reply("شكرا، سيتم عمل اللازم");
-
-		const message = ctx.message.text;
-		const user = ctx.chat.id;
-		bot.api.sendMessage(622497099, `Message: ${message} \nFrom: ${user}`);
-		inCommand = false;
-	});
 });
 
-!inCommand && bot.on("message", (ctx) => {
+bot.on("message", (ctx) => {
 	const message = ctx.message.text;
 	const user = ctx.chat.id;
 	bot.api.sendMessage(622497099, `Message: ${message} \nFrom: ${user}`);

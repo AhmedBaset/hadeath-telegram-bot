@@ -8,22 +8,13 @@ var bot = new grammy_1.Bot(token);
 bot.command("start", function (ctx) {
     ctx.reply("سوف أساعدك في البحث عن الأحاديث، والتأكد من صحتها. \n للبحث عن حديث اضغط /search");
 });
-var inCommand = false;
 bot.command("search", function (ctx) {
     ctx.reply("حسنًا، أرسل الحديث أو بعض الكلمات للبحث عنه");
 });
 bot.command("issue", function (ctx) {
-    ctx.reply("سعيد بسماع رأيك، لو عندك مشكلة أو اقتراح اكتبها، وهحاول قدر الإمكان أصلحها");
-    inCommand = true;
-    bot.on("message", function (ctx) {
-        ctx.reply("شكرا، سيتم عمل اللازم");
-        var message = ctx.message.text;
-        var user = ctx.chat.id;
-        bot.api.sendMessage(622497099, "Message: ".concat(message, " \nFrom: ").concat(user));
-        inCommand = false;
-    });
+    ctx.reply("سعيد بسماع رأيك، لو عندك مشكلة أو اقتراح @A7med3bdulBaset");
 });
-!inCommand && bot.on("message", function (ctx) {
+bot.on("message", function (ctx) {
     var message = ctx.message.text;
     var user = ctx.chat.id;
     bot.api.sendMessage(622497099, "Message: ".concat(message, " \nFrom: ").concat(user));

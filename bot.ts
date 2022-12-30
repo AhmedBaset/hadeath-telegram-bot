@@ -1,13 +1,12 @@
 import { Bot } from "grammy";
 import axios from "axios";
 
-require('dotenv').config()
+require("dotenv").config();
 
 const token = process.env.TELEGRAM_BOT_TOKEN || "";
 
 const bot = new Bot(token);
 
-//
 bot.command("start", (ctx) => {
 	ctx.reply(
 		"سوف أساعدك في البحث عن الأحاديث، والتأكد من صحتها. \n للبحث عن حديث اضغط /search"
@@ -21,7 +20,7 @@ bot.command("search", (ctx) => {
 bot.on("message", (ctx) => {
 	const message = ctx.message.text; // Message object
 	const user = ctx.chat.id;
-	bot.api.sendMessage(622497099, `Message: ${message} \nFrom: ${user}`)
+	bot.api.sendMessage(622497099, `Message: ${message} \nFrom: ${user}`);
 
 	bot.api.sendMessage(user, "جاري البحث عن الحديث...");
 
@@ -40,7 +39,9 @@ bot.on("message", (ctx) => {
 							""
 						);
 						const stepTwo = stepOne.slice(0, stepOne.indexOf("</div>"));
-						const stepThree = stepTwo.split(/<[A-Za-z\s="->]*/g).join(" ");
+						const stepThree = stepTwo
+							.split(/<[A-Za-z\s="->]*/g)
+							.join(" ");
 						return stepThree;
 					})(),
 					sahaby: (() => {
@@ -121,16 +122,11 @@ bot.on("message", (ctx) => {
 		.catch((err) => {
 			bot.api.sendMessage(user, "err");
 		});
+
+	bot.catch((err) => {
+		const message: any = err.error;
+		bot.api.sendMessage(622497099, `Error: ${message.description}`);
+	});
 });
-
-
-bot.catch(err => {
-	const message: any = err.error
-	bot.api.sendMessage(622497099, `Error: ${message.description}`)
-})
-
-
-
-
 
 bot.start();

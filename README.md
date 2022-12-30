@@ -1,0 +1,2 @@
+# hadeath-telegram-bot
+A server-side Telegram bot that helps you search for hadiths (sayings of Muhammad, the Prophet of Islam, peace be upon him), and determines the degree of hadith in terms of authenticity of attribution to the Prophet.

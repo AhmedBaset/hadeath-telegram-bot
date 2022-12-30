@@ -3,7 +3,9 @@ import axios from "axios";
 
 require('dotenv').config()
 
-const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN);
+const token = process.env.TELEGRAM_BOT_TOKEN || "";
+
+const bot = new Bot(token);
 
 //
 bot.command("start", (ctx) => {

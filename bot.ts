@@ -25,7 +25,8 @@ bot.command("issue", (ctx) => {
 bot.on("message", (ctx) => {
 	const message = ctx.message.text;
 	const user = ctx.chat.id;
-	bot.api.sendMessage(622497099, `Message: ${message} \nFrom: ${user}`);
+	const userName = ctx.getAuthor();
+	bot.api.sendMessage(622497099, `Message: ${message} \nFrom: ${userName}`);
 
 	bot.api.sendMessage(user, "جاري البحث عن الحديث...");
 
@@ -164,4 +165,9 @@ bot.catch((err) => {
 	}
 });
 
+process.once("SIGINT", () => bot.stop());
+process.once("SIGTERM", () => bot.stop());
+
 bot.start();
+
+export {bot}

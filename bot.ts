@@ -2,9 +2,7 @@ import { Bot, GrammyError, HttpError } from "grammy";
 import axios from "axios";
 
 require("dotenv").config();
-
 const token = process.env.TELEGRAM_BOT_TOKEN || "";
-
 const bot = new Bot(token);
 
 bot.command("start", (ctx) => {
@@ -42,6 +40,11 @@ bot.on("message", (ctx) => {
 		.get(`https://dorar.net/dorar_api.json?skey=${message}`)
 		.then((response) => {
 			const data: string = response.data.ahadith.result;
+
+			if (data.startsWith("<br\/><br\/>\n<a href=\"https:\/\/dorar.net\/hadith\/search?q=")) {
+				bot.api.sendMessage(user, `لم أجد حديثا في كتب السنة فيه كلمة "${message}"`)
+				return 
+			}
 
 			const ahadithArrayWithHtmlMarkup = data.split("--------------");
 
@@ -150,14 +153,21 @@ bot.catch((err) => {
 		622497099,
 		`Error while handling update: \n${ctx.update.update_id}`
 	);
+	console.log(
+		622497099,
+		`Error while handling update: \n${ctx.update.update_id}`
+	);
 	const e = err.error;
 	if (e instanceof GrammyError) {
 		bot.api.sendMessage(622497099, `Error in request: \n${e.description}`);
+		console.log(622497099, `Error in request: \n${e.description}`);
 	} else if (e instanceof HttpError) {
 		console.error("Could not contact Telegram:", e);
 		bot.api.sendMessage(622497099, `Could not contact Telegram: \n${e}`);
+		console.log(622497099, `Could not contact Telegram: \n${e}`);
 	} else {
 		bot.api.sendMessage(622497099, `Unknown error: \n${e}`);
+		console.log(622497099, `Unknown error: \n${e}`);
 	}
 });
 

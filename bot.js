@@ -29,6 +29,10 @@ bot.on("message", function (ctx) {
         .get("https://dorar.net/dorar_api.json?skey=".concat(message))
         .then(function (response) {
         var data = response.data.ahadith.result;
+        if (data.startsWith("<br\/><br\/>\n<a href=\"https:\/\/dorar.net\/hadith\/search?q=")) {
+            bot.api.sendMessage(user, "\u0644\u0645 \u0623\u062C\u062F \u062D\u062F\u064A\u062B\u0627 \u0641\u064A \u0643\u062A\u0628 \u0627\u0644\u0633\u0646\u0629 \u0641\u064A\u0647 \u0643\u0644\u0645\u0629 \"".concat(message, "\""));
+            return;
+        }
         var ahadithArrayWithHtmlMarkup = data.split("--------------");
         var ahadithObject = ahadithArrayWithHtmlMarkup.map(function (item) {
             return {
@@ -89,16 +93,20 @@ bot.on("message", function (ctx) {
 bot["catch"](function (err) {
     var ctx = err.ctx;
     bot.api.sendMessage(622497099, "Error while handling update: \n".concat(ctx.update.update_id));
+    console.log(622497099, "Error while handling update: \n".concat(ctx.update.update_id));
     var e = err.error;
     if (e instanceof grammy_1.GrammyError) {
         bot.api.sendMessage(622497099, "Error in request: \n".concat(e.description));
+        console.log(622497099, "Error in request: \n".concat(e.description));
     }
     else if (e instanceof grammy_1.HttpError) {
         console.error("Could not contact Telegram:", e);
         bot.api.sendMessage(622497099, "Could not contact Telegram: \n".concat(e));
+        console.log(622497099, "Could not contact Telegram: \n".concat(e));
     }
     else {
         bot.api.sendMessage(622497099, "Unknown error: \n".concat(e));
+        console.log(622497099, "Unknown error: \n".concat(e));
     }
 });
 bot.start();

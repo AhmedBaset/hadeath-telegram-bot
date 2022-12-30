@@ -67,8 +67,8 @@ bot.on("message", function (ctx) {
             return "\n\u0627\u0644\u062D\u062F\u064A\u062B: ".concat(hadith.text.slice(4), ".\n\n\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\n\u062D\u0643\u0645 \u0627\u0644\u062D\u062F\u064A\u062B: ").concat(hadith.hokm.trim(), ".\n\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\n\u0627\u0644\u0631\u0627\u0648\u064A: ").concat(hadith.sahaby.trim(), ".\n\u0627\u0644\u0643\u062A\u0627\u0628: ").concat(hadith.book.trim(), ".\n\u0627\u0644\u0645\u062D\u062F\u062B: ").concat(hadith.muhaddith.trim(), ".\n\u0627\u0644\u0635\u0641\u062D\u0629: ").concat(hadith.page.trim(), "\n\n            ");
         });
         bot.api.sendMessage(user, ahadith[0]);
-        bot.api.sendMessage(user, ahadith[1]);
-        bot.api.sendMessage(user, ahadith[2]);
+        setTimeout(function () { return bot.api.sendMessage(user, ahadith[1]); }, 1000);
+        setTimeout(function () { return bot.api.sendMessage(user, ahadith[1]); }, 2000);
     })["catch"](function (err) {
         bot.api.sendMessage(user, "err");
     });

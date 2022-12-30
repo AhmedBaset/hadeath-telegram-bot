@@ -118,8 +118,8 @@ bot.on("message", (ctx) => {
 			});
 
 			bot.api.sendMessage(user, ahadith[0]);
-			bot.api.sendMessage(user, ahadith[1]);
-			bot.api.sendMessage(user, ahadith[2]);
+			setTimeout(()=> bot.api.sendMessage(user, ahadith[1]), 1000)
+			setTimeout(()=> bot.api.sendMessage(user, ahadith[1]), 2000)
 		})
 		.catch((err) => {
 			bot.api.sendMessage(user, "err");

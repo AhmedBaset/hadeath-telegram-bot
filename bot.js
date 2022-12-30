@@ -22,8 +22,7 @@ bot.command("issue", (ctx) => {
 bot.on("message", (ctx) => {
     const message = ctx.message.text;
     const user = ctx.chat.id;
-    const userName = ctx.getAuthor();
-    bot.api.sendMessage(622497099, `Message: ${message} \nFrom: ${userName}`);
+    bot.api.sendMessage(622497099, `Message: ${message} \nFrom: ${user}`);
     bot.api.sendMessage(user, "جاري البحث عن الحديث...");
     axios_1.default
         .get(`https://dorar.net/dorar_api.json?skey=${message}`)

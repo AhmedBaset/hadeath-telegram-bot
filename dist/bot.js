@@ -83,13 +83,13 @@ bot.on("message", (ctx) => {
 
             `;
         });
-        bot.api.sendMessage(user, ahadith[0]);
-        setTimeout(() => {
-            bot.api.sendMessage(user, ahadith[1]);
-        }, 1000);
-        setTimeout(() => {
-            bot.api.sendMessage(user, ahadith[1]);
-        }, 2000);
+        let index = 0;
+        bot.api.sendMessage(user, ahadith[index]);
+        bot.api.sendMessage(user, `للمزيد من النتائج اضغط  /more \n لبحث جديد اضغط /search`);
+        bot.command("/more", ctx => {
+            index++;
+            bot.api.sendMessage(user, ahadith[index]);
+        });
     })
         .catch((err) => {
         bot.api.sendMessage(user, "err");

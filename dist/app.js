@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 3030;
 app.use(express.json());
 
-app.post(secretPath, (req, res) => { 
+app.post(`/${secretPath}`, (req, res) => { 
 console.log(req.body);  
 res.status(200).send('ok'); 
 })

@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 3030;
 app.use(express.json());
 
-app.post(`/${PORT}`, (req, res) => { 
+app.post(Number(PORT), (req, res) => { 
 console.log(req.body);  
 res.status(200).send('ok'); 
 })

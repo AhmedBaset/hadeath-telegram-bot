@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 3030;
 app.use(express.json());
 
-app.post(Number(PORT), (req, res) => { 
+app.post("https://api.telegram.org/bot5926809348:AAEJJFoAq8cz9l10QTR6K8mtKFt4Uvpu3ok/setWebhook?url=https://hadeath-bot.onrender.com/5926809348:AAEJJFoAq8cz9l10QTR6K8mtKFt4Uvpu3ok", (req, res) => { 
 console.log(req.body);  
 res.status(200).send('ok'); 
 })

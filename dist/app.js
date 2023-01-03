@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 3030;
 app.use(express.json());
 
-app.post(`/${secretPath}`, (req, res) => {
+app.get(`/${secretPath}`, (req, res) => {
     //send response
     res.sendStatus(200);
 });

@@ -7,11 +7,10 @@ const app = express();
 const PORT = process.env.PORT || 3030;
 app.use(express.json());
 
-app.post("https://api.telegram.org/bot5926809348:AAEJJFoAq8cz9l10QTR6K8mtKFt4Uvpu3ok/setWebhook?url=https://hadeath-bot.onrender.com/5926809348:AAEJJFoAq8cz9l10QTR6K8mtKFt4Uvpu3ok", (req, res) => { 
-console.log(req.body);  
-res.status(200).send('ok'); 
-})
-
+app.post(`/${secretPath}`, (req, res) => {
+    //send response
+    res.sendStatus(200);
+});
 
 app.use(`/${secretPath}`, webhookCallback(bot, "express"));
 app.listen(Number(process.env.PORT), async () => {

@@ -161,7 +161,7 @@ bot.on("message", (ctx) => {
 });
 // process.once("SIGINT", () => bot.stop());
 // process.once("SIGTERM", () => bot.stop());
-bot.start();
+// bot.start();
 export { bot };
 // bot.on("message", (ctx) => {
 // 	ctx.reply("التطبيق معطل حاليًا لحين الانتهاء من تطويره، 💻");

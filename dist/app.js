@@ -14,5 +14,6 @@ app.get(`/${secretPath}`, (req, res) => {
 
 app.use(`/${secretPath}`, webhookCallback(bot, "express"));
 app.listen(Number(process.env.PORT), async () => {
-    await bot.api.setWebhook(`https://${domain}/${secretPath}`);
+   // await bot.api.setWebhook(`https://${domain}/${secretPath}`);
+   bot.start()
 });
